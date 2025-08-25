@@ -12,7 +12,7 @@ import asyncio
 import pycountry
 
 # === CONFIG ===
-BOT_TOKEN = '8145573996:AAFLTxxEV5fF2nd-s-uLFmOG0127nMlcjS0'
+BOT_TOKEN = '8072862277:AAG_lVY9Z2hJd9dgmvtMxHDkcTrQXy75hTI'
 CHAT_ID = '-1002833675066'
 USERNAME = 'Jihad69s'
 PASSWORD = 'jihad79s'
