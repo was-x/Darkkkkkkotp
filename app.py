@@ -6,9 +6,8 @@ import os
 import re
 import sys
 import random
-from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.error import TimedOut
-import asyncio
+import telebot
+from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 import pycountry
 
 # === CONFIG ===
@@ -21,7 +20,7 @@ LOGIN_PAGE_URL = BASE_URL + "/ints/login"
 LOGIN_POST_URL = BASE_URL + "/ints/signin"
 DATA_URL = BASE_URL + "/ints/agent/res/data_smscdr.php"
 
-bot = Bot(token=BOT_TOKEN)
+bot = telebot.TeleBot(BOT_TOKEN)
 
 session = requests.Session()
 session.headers.update({"User-Agent": "Mozilla/5.0"})
@@ -175,7 +174,7 @@ def get_country_flag(country_name):
         pass
     return '🌐'
 
-async def sent_messages():
+def sent_messages():
     logging.info("🔍 Checking for messages...\n")
     data = fetch_data()
 
@@ -213,9 +212,8 @@ async def sent_messages():
                         f"🚀 Be Active  New OTP Coming\n"
                     )
 
-                    keyboard = InlineKeyboardMarkup([
-                        [InlineKeyboardButton("📢 Main Channel", url="https://t.me/PhTG_Numbers")]
-                    ])
+                    keyboard = InlineKeyboardMarkup()
+                    keyboard.add(InlineKeyboardButton("📢 Main Channel", url="https://t.me/PhTG_Numbers"))
 
                     try:
                         bot.send_message(
@@ -226,10 +224,7 @@ async def sent_messages():
                         )
                         logging.info(f"✅ OTP Sent: {number} - {otp}")
                         save_already_sent(already_sent)
-                        await asyncio.sleep(5)  # Delay between messages
-                    except TimedOut:
-                        logging.error("Telegram Timeout, retrying after 10 seconds...")
-                        await asyncio.sleep(10)
+                        time.sleep(5)  # Delay between messages
                     except Exception as e:
                         logging.error(f"Telegram Error: {e}")
                         continue
@@ -238,18 +233,18 @@ async def sent_messages():
     else:
         logging.info("✅ No new OTPs found.\n")
 
-async def main():
+def main():
     if not login():
         logging.error("Failed to login. Exiting.")
         return
 
     while True:
         try:
-            await sent_messages()
-            await asyncio.sleep(15)  # Delay between each check
+            sent_messages()
+            time.sleep(15)  # Delay between each check
         except Exception as e:
             logging.error(f"Error in main loop: {e}")
-            await asyncio.sleep(10)
+            time.sleep(10)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
