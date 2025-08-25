@@ -1,7 +1,5 @@
 flask>=3.0
-python-telegram-bot>=21,<23
-urllib3>=2
-standard-imghdr>=3.13.0
+telebot
 requests
 asyncio
 pycountry
